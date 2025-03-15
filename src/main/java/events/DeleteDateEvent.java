@@ -13,18 +13,16 @@ public class DeleteDateEvent extends ListenerAdapter {
         String message = event.getMessage().getContentRaw().toLowerCase();
         String[] args = message.split(" ");
 
-        if (args[0].equals("!deletedate") && args.length == 2) {
-            String description = args[1];
+        if (args[0].equals("!deletedate") && args.length >= 2) {
+            String description = String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length));
 
             dbManager.deleteDate(description);
 
             try {
                 event.getChannel().sendTyping().queue();
                 Thread.sleep(1500);
-                event.getChannel().sendMessage("Okay, I have deleted the date for " + description + ".").queue();
-            } catch (InterruptedException ex) {
-
-            }
+                event.getChannel().sendMessage("Okay, I have deleted the date for " + description).queue();
+            } catch (InterruptedException ex) {}
         }
     }
 }
