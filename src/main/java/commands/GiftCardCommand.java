@@ -2,7 +2,6 @@ package commands;
 
 import databases.DatabaseManager;
 import essentials.Config;
-import java.util.*;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -11,7 +10,6 @@ public class GiftCardCommand extends ListenerAdapter {
     private final Config config = new Config();
     private final String MY_USER_ID = config.getMyUserId();
     private final String HER_USER_ID = config.getHerUserId();
-    private final Map<String, String> dmConversations = new HashMap<>();
     private final DatabaseManager manager = new DatabaseManager();
 
     @Override
@@ -32,7 +30,9 @@ public class GiftCardCommand extends ListenerAdapter {
                     event.getJDA().retrieveUserById(MY_USER_ID).queue(user -> {
                         user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue());
                     });
-                    dmConversations.put(event.getUser().getId(), "dm");
+                    
+                    // delete the fetched gift card
+                    manager.deleteRegularGiftCard(giftCard);
                 } else {
                     event.reply("Sorry! There are not any gift cards stored at the moment.").queue();
 
@@ -42,7 +42,6 @@ public class GiftCardCommand extends ListenerAdapter {
                     event.getJDA().retrieveUserById(MY_USER_ID).queue(user -> {
                         user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue());
                     });
-                    dmConversations.put(event.getUser().getId(), "dm");
                 }
             } else {
                 event.reply("Only she can claim a gift card.").queue();
@@ -61,7 +60,6 @@ public class GiftCardCommand extends ListenerAdapter {
                         event.getJDA().retrieveUserById(MY_USER_ID).queue(user -> {
                             user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue());
                         });
-                        dmConversations.put(event.getUser().getId(), "dm");
                     }
                 } else {
                     event.reply("You can only change to the item you want in the #item-change-🤍 channel").queue();
@@ -75,7 +73,6 @@ public class GiftCardCommand extends ListenerAdapter {
                     event.getJDA().retrieveUserById(MY_USER_ID).queue(user -> {
                         user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue());
                     });
-                    dmConversations.put(event.getUser().getId(), "dm");
                 }
             }
         }

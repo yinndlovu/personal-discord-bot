@@ -59,6 +59,16 @@ public class GiftCardEvent extends ListenerAdapter {
                         + "" + month.substring(0, 1).toUpperCase() + month.substring(1) + " "
                         + "has been stored.").queue();
 
+            } else if (args[0].equalsIgnoreCase("!deleteallreg")) {
+                manager.deleteAllRegularGiftCard();
+
+                event.getChannel().sendMessage("All stored regular gift cards have been deleted.").queue();
+
+            } else if (args[0].equalsIgnoreCase("!deleteallmonthly")) {
+                manager.deleteAllMonthlyGiftCards();
+
+                event.getChannel().sendMessage("All monthly gift cards have been deleted.").queue();
+
             } else if (args[0].equalsIgnoreCase("!retrieve") && args.length == 2) {
                 String month = args[1];
                 String characters = manager.retrieveGiftCard(month);
@@ -96,7 +106,7 @@ public class GiftCardEvent extends ListenerAdapter {
                 } else {
                     event.getChannel().sendMessage("You haven't stored any gift cards.").queue();
                 }
-                
+
             } else if (message.equalsIgnoreCase("!retrieveallreg")) {
                 String giftCards = manager.retrieveAllRegular();
 
