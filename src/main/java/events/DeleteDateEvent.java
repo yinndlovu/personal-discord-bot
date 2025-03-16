@@ -21,7 +21,10 @@ public class DeleteDateEvent extends ListenerAdapter {
             try {
                 event.getChannel().sendTyping().queue();
                 Thread.sleep(1500);
-                event.getChannel().sendMessage("Okay, I have deleted the date for " + description).queue();
+                event.getChannel().sendMessage("Okay, I have deleted the date for "
+                        + description.substring(0, 1).toUpperCase()
+                        + description.substring(1)
+                        + ".").queue();
             } catch (InterruptedException ex) {}
         }
     }

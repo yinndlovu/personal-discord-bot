@@ -28,7 +28,7 @@ public class AddDateCommand extends ListenerAdapter {
                 event.reply("You've successfully added the date for "
                         + description.substring(0, 1).toUpperCase() + description.substring(1)
                         + " as " + formattedDate + ".\n\n"
-                        + "You may use /dates to view it and other dates.").queue();
+                        + "You may use `/dates` to view it and other dates.").queue();
                 LocalDate date = LocalDate.of(year, month, day);
                 
                 dbManager.addDate(description, date, emoji);

@@ -82,7 +82,7 @@ public class MoreDetailsButtonHandler extends ListenerAdapter {
                 if (untilPeriod.getDays() == 1) {
                     message.append(untilPeriod.getDays()).append(" day");
                 } else {
-                    message.append(sincePeriod.getDays()).append(" days");
+                    message.append(untilPeriod.getDays()).append(" days");
                 }
                 message.append("\n\n");
 
