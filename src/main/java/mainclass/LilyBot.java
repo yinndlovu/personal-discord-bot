@@ -42,7 +42,9 @@ public class LilyBot {
         JDA jda = builder.build();
         jda.awaitReady();
 
-        GiftCardScheduler giftCardScheduler = new GiftCardScheduler(jda);
+        DateReminderScheduler scheduler = new DateReminderScheduler(jda);
+        scheduler.startScheduler();
+        new GiftCardScheduler(jda);
  
         jda.updateCommands().addCommands(Commands.slash("change", "Change your monthly item")
                 .addOption(OptionType.STRING, "new_item", "What do you want to change to?", true),

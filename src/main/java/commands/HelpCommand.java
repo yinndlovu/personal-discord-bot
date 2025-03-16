@@ -3,19 +3,39 @@ package commands;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import java.util.*;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
 
 public class HelpCommand extends ListenerAdapter {
+
+    public static final Map<Long, Integer> userPageMap = new HashMap<>();
+    public static final List<List<Button>> pages = List.of(
+            List.of(
+                    Button.primary("help_redeem", "How to Redeem"),
+                    Button.primary("help_change", "How to change Monthly Item"),
+                    Button.primary("help_monthly_exp", "How Monthly works"),
+                    Button.success("button_next", "➡ Next Page")
+            ),
+            List.of(
+                    Button.danger("button_previous", "⬅ Previous Page"),
+                    Button.primary("dates_help", "How to use Dates"),
+                    Button.primary("delete_dates_how", "How to delete Dates"),
+                    Button.primary("storage_help", "About stored Gift Cards"),
+                    Button.success("button_next", "➡ Next Page")
+            ),
+            List.of(
+                    Button.danger("button_previous", "⬅ Previous Page"),
+                    Button.primary("commands_list", "View Available Commands")
+            )
+    );
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         if (event.getName().equals("help")) {
-            event.reply("What do you need help with?").addActionRow(
-                    Button.primary("help_redeem", "How to redeem"),
-                    Button.primary("help_change", "How to change monthly item"),
-                    Button.primary("help_monthly_exp", "How monthly works"),
-                    Button.primary("dates_help", "Learn how to use dates"),
-                    Button.primary("storage_help", "About stored gift cards"),
-                    Button.primary("commands_list", "View available commands")).queue();
+            userPageMap.put(event.getUser().getIdLong(), 0);
+
+            event.reply("What do you need help with?").addComponents(ActionRow.of(pages.get(0)))
+                    .setEphemeral(false).queue();
         }
     }
 }
