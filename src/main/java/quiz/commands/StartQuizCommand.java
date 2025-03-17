@@ -23,8 +23,8 @@ public class StartQuizCommand extends ListenerAdapter {
                     + " has challenged you into a quiz challenge.");
             embedBuilder.setColor(Color.GRAY);
             
-            Button acceptButton = Button.success("accept_quiz", "Game on");
-            Button declineButton = Button.danger("decline_quiz", "Not now");
+            Button acceptButton = Button.success("accept_quiz:" + challengerId + ":" + opponentId, "Game on");
+            Button declineButton = Button.danger("reject_quiz:" + challengerId + ":" + opponentId, "Not now");
             
             event.reply("Challenge for " + opponent.getAsMention()).addEmbeds(embedBuilder.build())
                     .addActionRow(acceptButton, declineButton).queue(message -> {

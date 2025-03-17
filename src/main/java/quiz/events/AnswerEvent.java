@@ -1,29 +1,34 @@
-package quiz.events;
+﻿public class QuizAnswerListener extends ListenerAdapter {
 
-import data.QuizSet;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import quiz.handlers.ChallengeHandler;
+    private final Map<String, QuizSession> activeSessions;
 
-public class AnswerEvent extends ListenerAdapter {
+    public QuizAnswerListener(Map<String, QuizSession> activeSessions) {
+        this.activeSessions = activeSessions;
+    }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        QuizSet currentAnswer = ChallengeHandler.quizSet.get(answerIndex);
-        String answer = event.getMessage().getContentRaw();
+        if (event.getAuthor().isBot()) return;
 
-        if (answer.equalsIgnoreCase(currentAnswer.getAnswer)) {
-            event.getChannel().sendMessage("Correct!").queue();
-            answerIndex++;
+        String channelId = event.getChannel().getId();
+        QuizSession session = activeSessions.get(channelId);
 
-            if (event.getAuthot().getId().equals(ChallengeHandler.challengerId)) {
-                ChallengeHandler.score.put(ChallengeHandler.challengerId,
-                        ChallengeHandler.score.get(ChallengeHandler.challengerId) + 1);
-            } else if (event.getAuthor().getId().equals(ChallengeHandler.opponentId)) {
-                ChallengeHandler.score.put(ChallengeHandler.opponentId,
-                        ChallengeHandler.score.get(ChallengeHandler.opponentId) + 1);
+        if (session == null) return;
+
+        String userId = event.getAuthor().getId();
+        String answer = event.getMessage().getContentRaw().trim();
+
+        if (session.isCorrectAnswer(answer)) {
+            session.awardPoint(userId);
+            event.getChannel().sendMessage("✅ Correct! Next question...").queue();
+            session.nextQuestion();
+
+            if (session.isFinished()) {
+                event.getChannel().sendMessage(session.getFinalScores()).queue();
+                activeSessions.remove(channelId);
             }
         } else {
-            event.getChannel().sendMessage("Incorrect!").queue();
+            event.getChannel().sendMessage("❌ Wrong answer! Try again.").queue();
         }
     }
 }

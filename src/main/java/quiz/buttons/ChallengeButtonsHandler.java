@@ -19,19 +19,31 @@ public class ChallengeButtonsHandler extends ListenerAdapter {
     public void onButtonInteraction(ButtonInteractionEvent event) {
         String compId = event.getComponentId();
         Message message = event.getMessage();
-        event.get
         
-        if (compId.equals("accept_quiz")) {
+        String[] parts = compId.split(":");
+
+        if (parts.length < 3) {
+            return;
+        }
+
+        String action = parts[0];
+        String challengerId = parts[1];
+        String opponentId = parts[2];
+
+        if (action.equals("accept_quiz")) {
+            
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setTitle("Challenge Accepted");
             embedBuilder.setDescription("The challenge has been accepted!");
             embedBuilder.setColor(Color.GREEN);
 
-            ChallengeHandler challengeHandler = new ChallengeHandler(event.getJDA(), , , event.getTextChannel());
+            ChallengeHandler challengeHandler = new ChallengeHandler(event.getJDA(), challengerId, opponentId, event.getChannel.getAsTextChannel());
 
         } else if (compId.equals("reject_quiz")) {
+
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setTitle("Challenge Rejected");
+
             if (event.getUser().getId().equals(MY_USER_ID)) {
                 embedBuilder.setDescription("Challenge rejected. Scared little boy...");
 			} else if (event.getUser().getId().equals(HER_USER_ID)) {
