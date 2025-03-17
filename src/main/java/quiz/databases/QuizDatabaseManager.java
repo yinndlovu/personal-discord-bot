@@ -1,10 +1,12 @@
+package quiz.databases;
+
 public class QuizDatabaseManager {
 
 	private final DatabaseConnector connector = new DatabaseConnector();
 
 	public List<QuizSet> getSet() {
 		List<QuizSet> quizSet = new ArrayList<>();
-		String query = "SELECT * FROM quiz_set";
+		String query = "SELECT question, answer FROM quiz_set ORDER BY RAND() LIMIT 10";
 
 		try (Connection connection = connector.connect();
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -42,10 +44,10 @@ public class QuizDatabaseManager {
 				ResultSet resultSet = preparedStatement.executeQuery()) {
 			preparedStatement.setInt(1, id);
 
-				if (resultSet.next()) {
-					String question = resultSet.getString("question");
-					return question;
-				}
+			if (resultSet.next()) {
+				String question = resultSet.getString("question");
+				return question;
+			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -69,3 +71,16 @@ public class QuizDatabaseManager {
 		}
 		return null;
 	}
+
+	public void updateWinCount(String userId) {
+		String query = "UPDATE users SET wins = wins + 1 WHERE user_id = ?";
+
+		try (Connection connection = connector.connect();
+				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setString(1, userId);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+}

@@ -8,7 +8,7 @@ public class ChallengeTimeoutHandler {
 			EmbedBuilder embedBuilder = new EmbedBuilder();
 			embedBuilder.setTitle("Challenge Timeout");
 			embedBuilder.setDescription("Challenge for " + opponent.getAsMention() + " has expired.");
-			embedBuilder.setColor(Color.RED);
+			embedBuilder.setColor(Color.ORANGE);
 
 
 			message.editMessageEmbeds(embedBuilder.build())
