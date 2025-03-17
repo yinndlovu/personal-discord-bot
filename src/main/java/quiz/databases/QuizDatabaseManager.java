@@ -4,8 +4,10 @@ public class QuizDatabaseManager {
 
 	public List<QuizSet> getSet() {
 		List<QuizSet> quizSet = new ArrayList<>();
+		String query = "SELECT * FROM quiz_set";
+
 		try (Connection connection = connector.connect();
-				PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM quiz_set");
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
 
 			while (resultSet.next()) {
@@ -20,8 +22,10 @@ public class QuizDatabaseManager {
 	}
 
 	public void addSet (String question, String answer) {
+		String query = "INSERT INTO quiz_set (question, answer) VALUES (?, ?)";
+
 		try (Connection connection = connector.connect();
-				PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO quiz_set (question, answer) VALUES (?, ?)")) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			preparedStatement.setString(1, question);
 			preparedStatement.setString(2, answer);
 			preparedStatement.executeUpdate();
@@ -31,8 +35,10 @@ public class QuizDatabaseManager {
 	}
 
 	public String getQuestion(int id) {
+		String query = "SELECT question FROM quiz_set WHERE id = ?";
+
 		try (Connection connection = connector.connect();
-				PreparedStatement preparedStatement = connection.prepareStatement("SELECT question FROM quiz_set WHERE id = ?");
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
 			preparedStatement.setInt(1, id);
 
@@ -47,8 +53,10 @@ public class QuizDatabaseManager {
 	}
 
 	public String getAnswer(int id) {
+		String query = "SELECT answer FROM quiz_set WHERE id = ?";
+
 		try (Connection connection = connector.connect();
-				PreparedStatement preparedStatement = connection.prepareStatement("SELECT answer FROM quiz_set WHERE id = ?");
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
 			preparedStatement.setInt(1, id);
 			
