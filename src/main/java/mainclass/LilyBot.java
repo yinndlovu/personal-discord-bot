@@ -56,6 +56,8 @@ public class LilyBot {
                         .addOption(OptionType.INTEGER, "month", "What month is it?", true)
                         .addOption(OptionType.INTEGER, "year", "What year is it?", true)
                         .addOption(OptionType.STRING, "emoji", "Add a decorative emoji if you want", false),
-                Commands.slash("dates", "View all your saved important dates")).queue();
+                Commands.slash("dates", "View all your saved important dates"),
+                Commands.slash("start-quiz", "Play a quiz game against each other")
+                        .addOption(OptionType.USER, "opponent", "Who are you playing against?", true)).queue();
     }
 }
