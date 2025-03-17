@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class StartQuizCommand extends ListenerAdapter {
 
+    private final ChallengeTimeoutHandler timeoutHandler = new ChallengeTimeoutHandler();
+
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         if (event.getName().equals("start-quiz")) {
@@ -24,7 +26,9 @@ public class StartQuizCommand extends ListenerAdapter {
             Button declineButton = Button.danger("decline_quiz", "Not now");
             
             event.reply("Challenge for " + opponent.getAsMention()).addEmbeds(embedBuilder.build())
-                    .addActionRow(acceptButton, declineButton).queue();
+                    .addActionRow(acceptButton, declineButton).queue(message -> {
+                        timeoutHandler.handleTimeout(message, opponent);
+                    });
         }
     }
 }
