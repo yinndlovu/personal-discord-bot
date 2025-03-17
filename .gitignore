@@ -9,3 +9,5 @@ src/main/java/essentials/Config.java
 target/
 
 lib/
+
+.vs/
