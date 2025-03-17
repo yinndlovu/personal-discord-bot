@@ -1,7 +1,13 @@
 package quiz.buttons;
 
+import essentials.Config;
+import java.awt.Color;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import quiz.handlers.ChallengeHandler;
 
 public class ChallengeButtonsHandler extends ListenerAdapter {
     
