@@ -46,13 +46,32 @@ public class GiftCardScheduler {
 
             String giftCard = databaseManager.retrieveGiftCard(month);
             if (giftCard != null && !giftCard.isEmpty()) {
-                String message = "Heyyy <@" + HER_USER_ID + ">\n\n"
+
+                String[] messages = {"Heyyy <@" + HER_USER_ID + ">\n\n"
                         + "Here's your gift card for " + month.substring(0, 1).toUpperCase()
-                        + month.substring(1) + ": **" + giftCard.toUpperCase() + "**.";
+                        + month.substring(1) + ": **" + giftCard.toUpperCase() + "**.",
+                    
+                        "Ooooh! Would you look at that?! It's the 1st of the month again and I have got"
+                        + " a little something for you <@" + HER_USER_ID + "> \n\n"
+                        + "**" + giftCard.toUpperCase() + "**! You know what to do 😉",
+                    
+                        "Happyyyy " + month.substring(0, 1).toUpperCase() + month.substring(1)
+                        + "<@" + HER_USER_ID + "> 🤍🎊\n\n"
+                        + "Treat yourself with this - " + "**" +giftCard.toUpperCase() + "**.",
+                    
+                        ""};
+
+                Random random = new Random();
+                int randomIndex = random.nextInt(messages.length);
+                String randomMessage = messages[randomIndex];
 
                 TextChannel channel = jda.getTextChannelById(CHANNEL_ID);
+
                 if (channel != null) {
-                    channel.sendMessage(message).queue();
+                    channel.sendMessage(randomMessage).queue();
+
+                    System.out.println("A gift card for " + month.substring(0, 1).toUpperCase() + month.substring(1) + 
+                    " has been sent.");
                 } else {
                     System.out.println("There has been an issue retrieving the channel to send the gift card.");
                 }
