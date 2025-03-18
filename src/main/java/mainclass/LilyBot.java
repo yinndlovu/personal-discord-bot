@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import quiz.buttons.ChallengeButtonsHandler;
 import quiz.commands.StartQuizCommand;
 import quiz.events.AnswerEvent;
+import quiz.handlers.ChallengeTimeoutHandler;
 import tasks.DateReminderScheduler;
 
 public class LilyBot {
@@ -22,6 +23,7 @@ public class LilyBot {
     public static void main(String[] args) throws Exception {
 
         String token = config.getBotToken();
+        ChallengeTimeoutHandler timeoutHandler = new ChallengeTimeoutHandler();
 
         JDABuilder builder = JDABuilder.createDefault(token)
                 .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT)
@@ -42,8 +44,8 @@ public class LilyBot {
                 new DatesCommand(),
                 new DeleteDateEvent(),
                 new AnswerEvent(),
-                new ChallengeButtonsHandler(),
-                new StartQuizCommand());
+                new ChallengeButtonsHandler(timeoutHandler),
+                new StartQuizCommand(timeoutHandler));
 
         JDA jda = builder.build();
         jda.awaitReady();
@@ -51,7 +53,7 @@ public class LilyBot {
         DateReminderScheduler scheduler = new DateReminderScheduler(jda);
         scheduler.startScheduler();
         new GiftCardScheduler(jda);
- 
+
         jda.updateCommands().addCommands(Commands.slash("change", "Change your monthly item")
                 .addOption(OptionType.STRING, "new_item", "What do you want to change to?", true),
                 Commands.slash("take-gift-card", "Take a stored gift card"),

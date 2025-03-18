@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import quiz.databases.QuizDatabaseManager;
+import quiz.handlers.ChallengeTimeoutHandler;
 import quiz.handlers.QuizSessionHandler;
 
 public class ChallengeButtonsHandler extends ListenerAdapter {
@@ -19,6 +20,11 @@ public class ChallengeButtonsHandler extends ListenerAdapter {
     private final String MY_USER_ID = config.getMyUserId();
     private final String HER_USER_ID = config.getHerUserId();
     private final QuizDatabaseManager quizManager = new QuizDatabaseManager();
+    private final ChallengeTimeoutHandler timeoutHandler;
+
+    public ChallengeButtonsHandler(ChallengeTimeoutHandler timeoutHandler) {
+        this.timeoutHandler = timeoutHandler;
+    }
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
@@ -43,6 +49,7 @@ public class ChallengeButtonsHandler extends ListenerAdapter {
         event.deferEdit().queue();
 
         if (action.equals("accept_quiz")) {
+            timeoutHandler.cancelTimeout();
 
             embedBuilder.setTitle("Challenge Accepted");
             embedBuilder.setDescription("The challenge has been accepted!");
@@ -55,6 +62,7 @@ public class ChallengeButtonsHandler extends ListenerAdapter {
             sessionHandler.startSession(challengerId, opponentId, channel, quizSet);
 
         } else if (action.equals("decline_quiz")) {
+            timeoutHandler.cancelTimeout();
 
             embedBuilder.setTitle("Challenge Rejected");
 

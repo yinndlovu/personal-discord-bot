@@ -10,8 +10,7 @@ public class AnswerEvent extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         String userId = event.getAuthor().getId();
-        QuizSessionHandler sessionHandler = new QuizSessionHandler();
-        QuizSession session = sessionHandler.getSession(userId);
+        QuizSession session = QuizSessionHandler.getSession(userId);
         
         if (session != null) {
             session.handleAnswer(event);

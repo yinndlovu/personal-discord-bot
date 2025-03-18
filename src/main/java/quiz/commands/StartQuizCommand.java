@@ -10,7 +10,11 @@ import quiz.handlers.ChallengeTimeoutHandler;
 
 public class StartQuizCommand extends ListenerAdapter {
 
-    private final ChallengeTimeoutHandler timeoutHandler = new ChallengeTimeoutHandler();
+    private final ChallengeTimeoutHandler timeoutHandler;
+
+    public StartQuizCommand(ChallengeTimeoutHandler timeoutHandler) {
+        this.timeoutHandler = timeoutHandler;
+    }
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {

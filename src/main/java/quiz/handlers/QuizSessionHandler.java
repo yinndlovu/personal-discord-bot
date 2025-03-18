@@ -9,8 +9,8 @@ import quiz.sessions.QuizSession;
 
 public class QuizSessionHandler {
 
-    private final Map<String, QuizSession> activeSessions = new HashMap<>();
-
+    private static final Map<String, QuizSession> activeSessions = new HashMap<>();
+    
     public void startSession(String challengerId, String opponentId, TextChannel channel, List<QuizSet> quizSet) {
         String sessionKey = challengerId + "vs" + opponentId;
         QuizSession session = new QuizSession(challengerId, opponentId, channel, quizSet);
@@ -18,7 +18,7 @@ public class QuizSessionHandler {
         session.askNextQuestion();
     }
 
-    public QuizSession getSession(String userId) {
+    public static QuizSession getSession(String userId) {
         for (QuizSession session : activeSessions.values()) {
             if (session != null && (session.getChallengerId().equals(userId) || session.getOpponentId().equals(userId))) {
                 return session;
