@@ -1,4 +1,4 @@
-package commands;
+package giftcards.commands;
 
 import databases.DatabaseManager;
 import essentials.Config;

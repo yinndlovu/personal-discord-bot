@@ -1,4 +1,4 @@
-package events;
+package giftcards.events;
 
 import databases.DatabaseManager;
 import essentials.Config;

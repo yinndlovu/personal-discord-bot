@@ -97,6 +97,7 @@ public class MoreDetailsButtonHandler extends ListenerAdapter {
                 }
             }
 
+            // when a date is less than a month away, mark it as upcoming
             if (upcomingDate != null && daysUntilUpcoming <= 31) {
                 message.append("\n**⏳ Upcoming ⏳**\n\n");
 

@@ -10,6 +10,10 @@ public class HelpCommand extends ListenerAdapter {
 
     public static final Map<Long, Integer> userPageMap = new HashMap<>();
     public static final List<List<Button>> pages = List.of(
+            /*
+            storing buttons in lists and putting them in separate message pages
+            to avoid limitations and expand usage
+            */
             List.of(
                     Button.primary("help_redeem", "How to Redeem"),
                     Button.primary("help_change", "How to change Monthly Item"),

@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 public class AddDateCommand extends ListenerAdapter {
 
     private final DatesDBManager dbManager = new DatesDBManager();
-    
+
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
 
@@ -30,7 +30,7 @@ public class AddDateCommand extends ListenerAdapter {
                         + " as " + formattedDate + ".\n\n"
                         + "You may use `/dates` to view it and other dates.").queue();
                 LocalDate date = LocalDate.of(year, month, day);
-                
+
                 dbManager.addDate(description, date, emoji);
             } catch (DateTimeException ex) {
                 event.reply("Date is invalid. Enter the proper date. All dates are written in numbers.").queue();

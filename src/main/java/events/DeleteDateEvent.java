@@ -25,7 +25,8 @@ public class DeleteDateEvent extends ListenerAdapter {
                         + description.substring(0, 1).toUpperCase()
                         + description.substring(1)
                         + ".").queue();
-            } catch (InterruptedException ex) {}
+            } catch (InterruptedException ex) {
+            }
         }
     }
 }

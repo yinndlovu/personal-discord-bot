@@ -1,9 +1,10 @@
-package tasks;
+package giftcards.tasks;
 
 import java.time.*;
 import java.util.concurrent.*;
 import databases.DatabaseManager;
 import essentials.Config;
+import giftcards.messages.MessageProvider;
 import java.util.Random;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -47,18 +48,9 @@ public class GiftCardScheduler {
 
             String giftCard = databaseManager.retrieveGiftCard(month);
             if (giftCard != null && !giftCard.isEmpty()) {
-
-                String[] messages = {"Heyyy <@" + HER_USER_ID + ">\n\n"
-                    + "Here's your gift card for " + month.substring(0, 1).toUpperCase()
-                    + month.substring(1) + ": **" + giftCard.toUpperCase() + "**.",
-                    "Ooooh! Would you look at that?! It's the 1st of the month again and I have got"
-                    + " a little something for you <@" + HER_USER_ID + "> \n\n"
-                    + "**" + giftCard.toUpperCase() + "**! You know what to do 😉",
-                    "Happyyyy " + month.substring(0, 1).toUpperCase() + month.substring(1)
-                    + "<@" + HER_USER_ID + "> 🤍🎊\n\n"
-                    + "Treat yourself with this - " + "**" + giftCard.toUpperCase() + "**.",
-                    ""};
-
+                MessageProvider messageProvider = new MessageProvider(HER_USER_ID, month, giftCard);
+                String[] messages = messageProvider.getMessages();
+                
                 Random random = new Random();
                 int randomIndex = random.nextInt(messages.length);
                 String randomMessage = messages[randomIndex];

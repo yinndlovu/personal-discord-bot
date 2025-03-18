@@ -10,7 +10,7 @@ import quiz.sessions.QuizSession;
 public class QuizSessionHandler {
 
     private static final Map<String, QuizSession> activeSessions = new HashMap<>();
-    
+
     public void startSession(String challengerId, String opponentId, TextChannel channel, List<QuizSet> quizSet) {
         String sessionKey = challengerId + "vs" + opponentId;
         QuizSession session = new QuizSession(challengerId, opponentId, channel, quizSet);

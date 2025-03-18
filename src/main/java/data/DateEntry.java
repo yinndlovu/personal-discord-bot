@@ -21,7 +21,7 @@ public class DateEntry {
     public LocalDate getDate() {
         return date;
     }
-    
+
     public String getEmoji() {
         return emoji;
     }

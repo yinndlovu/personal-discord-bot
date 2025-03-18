@@ -6,12 +6,12 @@ import quiz.handlers.QuizSessionHandler;
 import quiz.sessions.QuizSession;
 
 public class AnswerEvent extends ListenerAdapter {
-    
+
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         String userId = event.getAuthor().getId();
         QuizSession session = QuizSessionHandler.getSession(userId);
-        
+
         if (session != null) {
             session.handleAnswer(event);
         }

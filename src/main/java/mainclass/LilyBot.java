@@ -1,10 +1,12 @@
 package mainclass;
 
+import giftcards.commands.GiftCardCommand;
+import giftcards.events.GiftCardEvent;
 import buttons.*;
 import commands.*;
 import essentials.Config;
 import events.*;
-import tasks.GiftCardScheduler;
+import giftcards.tasks.GiftCardScheduler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
