@@ -1,5 +1,8 @@
+package quiz.events;
+
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import quiz.databases.QuizDatabaseManager;
 
 public class AddSetEvent extends ListenerAdapter {
 
@@ -14,8 +17,8 @@ public class AddSetEvent extends ListenerAdapter {
             int questionMarkIndex = commandContent.indexOf("?");
 
             if (questionMarkIndex == -1) {
-                event.getChannel().sendMessage("Usage: !addset <question?> <answer>\n\n" +
-                "-# Reminder to also include a question mark in your question").queue();
+                event.getChannel().sendMessage("Usage: !addset <question?> <answer>\n\n"
+                        + "-# Reminder to also include a question mark in your question").queue();
                 return;
             }
 

@@ -10,6 +10,9 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import quiz.buttons.ChallengeButtonsHandler;
+import quiz.commands.StartQuizCommand;
+import quiz.events.AnswerEvent;
 import tasks.DateReminderScheduler;
 
 public class LilyBot {
@@ -37,7 +40,10 @@ public class LilyBot {
                 new MoreDetailsButtonHandler(),
                 new AddDateCommand(),
                 new DatesCommand(),
-                new DeleteDateEvent());
+                new DeleteDateEvent(),
+                new AnswerEvent(),
+                new ChallengeButtonsHandler(),
+                new StartQuizCommand());
 
         JDA jda = builder.build();
         jda.awaitReady();

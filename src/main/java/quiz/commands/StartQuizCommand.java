@@ -16,20 +16,24 @@ public class StartQuizCommand extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         if (event.getName().equals("start-quiz")) {
             User opponent = event.getOption("opponent").getAsUser();
+            String opponentId = opponent.getId();
+            String challengerId = event.getUser().getId();
 
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setTitle("Quiz Challenge");
             embedBuilder.setDescription(event.getUser().getAsMention()
                     + " has challenged you into a quiz challenge.");
             embedBuilder.setColor(Color.GRAY);
-            
+
             Button acceptButton = Button.success("accept_quiz:" + challengerId + ":" + opponentId, "Game on");
-            Button declineButton = Button.danger("reject_quiz:" + challengerId + ":" + opponentId, "Not now");
-            
+            Button declineButton = Button.danger("decline_quiz:" + challengerId + ":" + opponentId, "Not now");
+
             event.reply("Challenge for " + opponent.getAsMention()).addEmbeds(embedBuilder.build())
-                    .addActionRow(acceptButton, declineButton).queue(message -> {
-                        timeoutHandler.handleTimeout(message, opponent);
-                    });
+                    .addActionRow(acceptButton, declineButton).queue(hook -> {
+                hook.retrieveOriginal().queue(message -> {
+                    timeoutHandler.handleTimeout(message, opponent);
+                });
+            });
         }
     }
 }
