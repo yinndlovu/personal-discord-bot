@@ -36,6 +36,8 @@ public class QuizDatabaseManager {
             preparedStatement.setString(1, question);
             preparedStatement.setString(2, answer);
             preparedStatement.executeUpdate();
+
+            System.out.println("A new quiz set has been added.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -79,6 +81,8 @@ public class QuizDatabaseManager {
         try (Connection connection = connector.connect(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, userId);
             preparedStatement.executeUpdate();
+
+            System.out.println("A user win has been updated.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
