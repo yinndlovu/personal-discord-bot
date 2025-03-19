@@ -2,10 +2,7 @@ package quiz.databases;
 
 import data.QuizSet;
 import databases.DatabaseConnector;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 public class QuizDatabaseManager {

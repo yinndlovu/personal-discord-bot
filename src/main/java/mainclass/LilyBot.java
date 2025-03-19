@@ -1,21 +1,13 @@
 package mainclass;
 
-import giftcards.commands.GiftCardCommand;
-import giftcards.events.GiftCardEvent;
-import buttons.*;
-import commands.*;
 import essentials.Config;
-import events.*;
 import giftcards.tasks.GiftCardScheduler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import quiz.buttons.ChallengeButtonsHandler;
-import quiz.commands.StartQuizCommand;
-import quiz.events.AnswerEvent;
 import quiz.handlers.ChallengeTimeoutHandler;
+import setup.CommandManager;
+import setup.EventManager;
 import tasks.DateReminderScheduler;
 
 public class LilyBot {
@@ -33,41 +25,20 @@ public class LilyBot {
                 .enableIntents(GatewayIntent.DIRECT_MESSAGES)
                 .enableIntents(GatewayIntent.DIRECT_MESSAGE_TYPING);
 
-        builder.addEventListeners(
-                new GiftCardEvent(),
-                new ForwardMessagesEvent(),
-                new ClearCartEvent(),
-                new CartPriceEvent(),
-                new HelpCommand(),
-                new GiftCardCommand(),
-                new HelpButtonHandler(),
-                new MoreDetailsButtonHandler(),
-                new AddDateCommand(),
-                new DatesCommand(),
-                new DeleteDateEvent(),
-                new AnswerEvent(),
-                new ChallengeButtonsHandler(timeoutHandler),
-                new StartQuizCommand(timeoutHandler));
-
         JDA jda = builder.build();
         jda.awaitReady();
 
-        DateReminderScheduler scheduler = new DateReminderScheduler(jda);
-        scheduler.startScheduler();
-        new GiftCardScheduler(jda);
+        EventManager.registerEvents(jda, timeoutHandler);
+        CommandManager.registerCommands(jda);
 
-        jda.updateCommands().addCommands(Commands.slash("change", "Change your monthly item")
-                .addOption(OptionType.STRING, "new_item", "What do you want to change to?", true),
-                Commands.slash("take-gift-card", "Take a stored gift card"),
-                Commands.slash("help", "Get help with stuff"),
-                Commands.slash("add-date", "Add a date to your important dates")
-                        .addOption(OptionType.STRING, "description", "What is the date name/about?", true)
-                        .addOption(OptionType.INTEGER, "day", "What day is it?", true)
-                        .addOption(OptionType.INTEGER, "month", "What month is it?", true)
-                        .addOption(OptionType.INTEGER, "year", "What year is it?", true)
-                        .addOption(OptionType.STRING, "emoji", "Add a decorative emoji if you want", false),
-                Commands.slash("dates", "View all your saved important dates"),
-                Commands.slash("start-quiz", "Play a quiz game against each other")
-                        .addOption(OptionType.USER, "opponent", "Who are you playing against?", true)).queue();
+        DateReminderScheduler dateScheduler = new DateReminderScheduler(jda);
+        dateScheduler.startScheduler();
+        GiftCardScheduler giftCardScheduler = new GiftCardScheduler(jda);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            giftCardScheduler.shutdown();
+            dateScheduler.shutdown();
+            System.out.println("Gift card scheduler has shut down.");
+        }));
     }
 }
