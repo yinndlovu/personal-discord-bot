@@ -20,7 +20,9 @@ public class CommandManager {
                         .addOption(OptionType.STRING, "emoji", "Add a decorative emoji if you want", false),
                 Commands.slash("dates", "View all your saved important dates"),
                 Commands.slash("start-quiz", "Play a quiz game against each other")
-                        .addOption(OptionType.USER, "opponent", "Who are you playing against?", true)
+                        .addOption(OptionType.USER, "opponent", "Who are you playing against?", true),
+                Commands.slash("check-wins", "Check games won in quizzes")
+                        .addOption(OptionType.USER, "player", "Check how many wins player has", false)
         ).queue();
     }
 }

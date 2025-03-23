@@ -1,21 +1,15 @@
 package setup;
 
-import buttons.HelpButtonHandler;
-import buttons.MoreDetailsButtonHandler;
-import commands.AddDateCommand;
-import commands.DatesCommand;
-import commands.HelpCommand;
-import events.CartPriceEvent;
-import events.ClearCartEvent;
-import events.DeleteDateEvent;
+import buttons.*;
+import commands.*;
+import events.*;
 import events.ForwardMessagesEvent;
 import giftcards.commands.GiftCardCommand;
 import giftcards.events.GiftCardEvent;
 import net.dv8tion.jda.api.JDA;
 import quiz.buttons.ChallengeButtonsHandler;
-import quiz.commands.StartQuizCommand;
-import quiz.events.AddSetEvent;
-import quiz.events.AnswerEvent;
+import quiz.commands.*;
+import quiz.events.*;
 import quiz.handlers.ChallengeTimeoutHandler;
 
 public class EventManager {
@@ -36,7 +30,8 @@ public class EventManager {
                 new AnswerEvent(),
                 new ChallengeButtonsHandler(timeoutHandler),
                 new StartQuizCommand(timeoutHandler),
-                new AddSetEvent()
+                new AddSetEvent(),
+                new CheckWinsCommand()
         );
     }
 }
