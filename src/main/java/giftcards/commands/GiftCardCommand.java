@@ -55,6 +55,7 @@ public class GiftCardCommand extends ListenerAdapter {
                     event.reply("You have changed your item for the next month to " + newItem).queue();
 
                     if (!event.getUser().getId().equals(MY_USER_ID)) {
+                        System.out.println("The monthly item has been changed to " + newItem + ".");
 
                         String message = "Monthly item successfully configured to: " + newItem;
                         event.getJDA().retrieveUserById(MY_USER_ID).queue(user -> {
@@ -68,6 +69,7 @@ public class GiftCardCommand extends ListenerAdapter {
                 event.reply("You have changed your item for the next month to " + newItem).queue();
 
                 if (!event.getUser().getId().equals(MY_USER_ID)) {
+                    System.out.println("The monthly item has been changed to " + newItem + ".");
 
                     String message = "Monthly item successfully configured to: " + newItem;
                     event.getJDA().retrieveUserById(MY_USER_ID).queue(user -> {
