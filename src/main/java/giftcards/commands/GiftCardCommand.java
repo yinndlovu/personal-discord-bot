@@ -20,7 +20,7 @@ public class GiftCardCommand extends ListenerAdapter {
                 String giftCard = manager.getRegularGiftCard();
 
                 if (!giftCard.isEmpty()) {
-                    event.reply("You have successfully taken a gift card!"
+                    event.reply("Heyyy! You want a gift card?! Here's one. Enjoy!"
                             + "\n\n"
                             + "Code: **" + giftCard + "**").queue();
 
