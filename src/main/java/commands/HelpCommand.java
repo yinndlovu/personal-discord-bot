@@ -29,6 +29,7 @@ public class HelpCommand extends ListenerAdapter {
             ),
             List.of(
                     Button.danger("button_previous", "⬅ Previous Page"),
+                    Button.danger("quiz_help", "About Quiz Games"),
                     Button.primary("commands_list", "View Available Commands")
             )
     );
