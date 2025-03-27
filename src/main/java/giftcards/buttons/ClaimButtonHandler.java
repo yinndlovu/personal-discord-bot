@@ -1,5 +1,6 @@
 package giftcards.buttons;
 
+import databases.DatabaseManager;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -7,15 +8,21 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 public class ClaimButtonHandler extends ListenerAdapter {
 
     private final String HER_USER_ID = "";
+    private final DatabaseManager databaseManager = new DatabaseManager();
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
-
-        if (event.getComponentId().equals("claim_button")) {
+        String compId = event.getComponentId();
+        String[] parts = compId.split(":");
+        
+        String action = parts[0];
+        String monthName = parts[1];
+        
+        if (action.equals("claim_button")) {
             if (event.getUser().getId().equals(HER_USER_ID)) {
                 event.deferReply().queue();
 
-                String giftCard = "".toUpperCase();
+                String giftCard = databaseManager.retrieveGiftCard(monthName).toUpperCase();
 
                 event.getHook().sendMessage("**" + giftCard + "**").setEphemeral(false).queue();
 

@@ -49,11 +49,11 @@ public class GiftCardScheduler {
         try {
             LocalDate currentDate = LocalDate.now(ZoneOffset.UTC);
             String monthName = currentDate.getMonth().name().toLowerCase();
-            String month = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
+            String giftCard = databaseManager.retrieveGiftCard(monthName);
             
-            String giftCard = databaseManager.retrieveGiftCard(month);
             if (giftCard != null && !giftCard.isEmpty()) {
-                MessageProvider messageProvider = new MessageProvider(HER_USER_ID, month, giftCard);
+                String month = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
+                MessageProvider messageProvider = new MessageProvider(HER_USER_ID, month);
                 String[] messages = messageProvider.getMessages();
                 
                 Random random = new Random();
@@ -63,14 +63,13 @@ public class GiftCardScheduler {
                 TextChannel channel = jda.getTextChannelById(CHANNEL_ID);
 
                 if (channel != null) {
-                    channel.sendMessage(randomMessage).queue();
-                    
                     EmbedBuilder embedBuilder = new EmbedBuilder();
                     embedBuilder.setTitle(month + " Gift Card");
                     embedBuilder.setDescription("Your monthly gift card is in! Click the button to claim it.");
+                    embedBuilder.setFooter("Enjoy 🤍");
                     embedBuilder.setColor(Color.MAGENTA);
                     
-                    Button claimButton = Button.success("claim_button", "Claim");
+                    Button claimButton = Button.success("claim_button:" + monthName, "Claim");
                     MessageEmbed messageEmbed = embedBuilder.build();
                     
                     channel.sendMessage(randomMessage).queue();
