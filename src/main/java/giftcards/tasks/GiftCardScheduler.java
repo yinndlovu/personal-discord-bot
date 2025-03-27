@@ -5,9 +5,13 @@ import java.util.concurrent.*;
 import databases.DatabaseManager;
 import essentials.Config;
 import giftcards.messages.MessageProvider;
+import java.awt.Color;
 import java.util.Random;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class GiftCardScheduler {
 
@@ -44,8 +48,9 @@ public class GiftCardScheduler {
     private void sendGiftCard() {
         try {
             LocalDate currentDate = LocalDate.now(ZoneOffset.UTC);
-            String month = currentDate.getMonth().name().toLowerCase();
-
+            String monthName = currentDate.getMonth().name().toLowerCase();
+            String month = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
+            
             String giftCard = databaseManager.retrieveGiftCard(month);
             if (giftCard != null && !giftCard.isEmpty()) {
                 MessageProvider messageProvider = new MessageProvider(HER_USER_ID, month, giftCard);
@@ -59,9 +64,19 @@ public class GiftCardScheduler {
 
                 if (channel != null) {
                     channel.sendMessage(randomMessage).queue();
+                    
+                    EmbedBuilder embedBuilder = new EmbedBuilder();
+                    embedBuilder.setTitle(month + " Gift Card");
+                    embedBuilder.setDescription("Your monthly gift card is in! Click the button to claim it.");
+                    embedBuilder.setColor(Color.MAGENTA);
+                    
+                    Button claimButton = Button.success("claim_button", "Claim");
+                    MessageEmbed messageEmbed = embedBuilder.build();
+                    
+                    channel.sendMessage(randomMessage).queue();
+                    channel.sendMessageEmbeds(messageEmbed).setActionRow(claimButton).queue();
 
-                    System.out.println("A gift card for " + month.substring(0, 1).toUpperCase() + month.substring(1)
-                            + " has been sent.");
+                    System.out.println("A gift card for " + month + " has been sent.");
                 } else {
                     System.out.println("There has been an issue retrieving the channel to send the gift card.");
                 }

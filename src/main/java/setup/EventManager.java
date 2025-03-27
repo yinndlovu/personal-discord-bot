@@ -9,6 +9,7 @@ import events.CartPriceEvent;
 import events.ClearCartEvent;
 import events.DeleteDateEvent;
 import events.ForwardMessagesEvent;
+import giftcards.buttons.ClaimButtonHandler;
 import giftcards.commands.GiftCardCommand;
 import giftcards.events.GiftCardEvent;
 import net.dv8tion.jda.api.JDA;
@@ -36,7 +37,8 @@ public class EventManager {
                 new AnswerEvent(),
                 new ChallengeButtonsHandler(timeoutHandler),
                 new StartQuizCommand(timeoutHandler),
-                new AddSetEvent()
+                new AddSetEvent(),
+                new ClaimButtonHandler()
         );
     }
 }
