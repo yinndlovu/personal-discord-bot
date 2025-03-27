@@ -2,6 +2,7 @@ package giftcards.buttons;
 
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class ClaimButtonHandler extends ListenerAdapter {
 
@@ -12,28 +13,22 @@ public class ClaimButtonHandler extends ListenerAdapter {
 
         if (event.getComponentId().equals("claim_button")) {
             if (event.getUser().getId().equals(HER_USER_ID)) {
-                String giftCard = "".toUpperCase(); // store the gift card
+                event.deferReply().queue();
 
-                event.getChannel().sendTyping().queue();
+                String giftCard = "".toUpperCase();
 
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException ex) {
-                    System.out.println(ex.getMessage());
-                }
+                event.getHook().sendMessage("**" + giftCard + "**").setEphemeral(false).queue();
 
-                event.getChannel().sendMessage("**" + giftCard + "**").queue();
+                Button disabledButton = Button.success("claim_button", "Claimed").asDisabled();
+
+                event.getInteraction().getMessage().editMessageEmbeds(event.getInteraction().getMessage().getEmbeds())
+                        .setActionRow(disabledButton)
+                        .queue();
             } else {
-                event.getChannel().sendTyping().queue();
+                event.deferReply().queue();
 
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException ex) {
-                    System.out.println(ex.getMessage());
-                }
-
-                event.getChannel().sendMessage("Hoooold your horses bucko! Only <@" + HER_USER_ID + "> "
-                        + "can claim the gift card.").queue();
+                event.getHook().sendMessage("Hooooold your horses bucko! Only <@" + HER_USER_ID + "> "
+                        + "can claim the gift card.").setEphemeral(false).queue();
             }
         }
     }

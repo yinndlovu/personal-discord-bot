@@ -3,20 +3,16 @@ package quiz.sessions;
 import data.QuizSet;
 import essentials.Config;
 import java.awt.Color;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import quiz.databases.QuizDatabaseManager;
 
 public class QuizSession {
 
+    private final QuizDatabaseManager manager = new QuizDatabaseManager();
     private final Config config = new Config();
     private final String MY_USER_ID = config.getMyUserId();
     private final String HER_USER_ID = config.getHerUserId();
@@ -129,11 +125,15 @@ public class QuizSession {
 
         if (challengerScore > opponentScore) {
             resultMessage = "<@" + challengerId + "> wins! 🎉";
+            manager.updateWinCount(challengerId);
         } else if (opponentScore > challengerScore) {
             resultMessage = "<@" + opponentId + "> wins! 🎉";
+            manager.updateWinCount(opponentId);
         } else {
             resultMessage = "Nobody wins...";
         }
+
+        manager.updateGamesPlayed(challengerId, opponentId);
 
         embedBuilder.setTitle("Quiz Score");
         embedBuilder.setDescription("<@" + challengerId + "> - " + challengerScore + "\n"

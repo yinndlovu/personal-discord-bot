@@ -2,11 +2,11 @@ package commands;
 
 import data.DateEntry;
 import databases.DatesDBManager;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.concurrent.*;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -15,7 +15,8 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 public class DatesCommand extends ListenerAdapter {
 
     private final DatesDBManager dbManager = new DatesDBManager();
-
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         try {
@@ -67,7 +68,12 @@ public class DatesCommand extends ListenerAdapter {
                     message.append("-# (in ").append(daysUntilUpcoming).append(" days)");
                 }
                 event.getHook().editOriginal(message.toString())
-                        .setActionRow(Button.secondary("more_details", "Detailed Dates")).queue();
+                        .setActionRow(Button.secondary("more_details", "Detailed Dates"))
+                        .queue(sentMessage -> {
+                            scheduler.schedule(() -> {
+                                sentMessage.editMessageComponents().queue();
+                            }, 2, TimeUnit.MINUTES);
+                        });
             }
         } catch (ErrorResponseException ex) {
             System.out.println(ex.getMessage());

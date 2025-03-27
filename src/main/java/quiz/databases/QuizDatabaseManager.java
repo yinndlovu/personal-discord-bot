@@ -40,6 +40,7 @@ public class QuizDatabaseManager {
         }
     }
 
+    /*
     public String getQuestion(int id) {
         String query = "SELECT question FROM quiz_set WHERE id = ?";
 
@@ -55,7 +56,9 @@ public class QuizDatabaseManager {
         }
         return null;
     }
+     */
 
+    /*
     public String getAnswer(int id) {
         String query = "SELECT answer FROM quiz_set WHERE id = ?";
 
@@ -71,17 +74,147 @@ public class QuizDatabaseManager {
         }
         return null;
     }
+     */
+
+    public int getWinCount(String userId) {
+        String sql = "SELECT win_count FROM quiz_users WHERE user_id = ?";
+
+        try (Connection connection = connector.connect();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("win_count");
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return 0;
+    }
+
+    public String getQuizUser(String userId) {
+        String sql = "SELECT user_id FROM quiz_users WHERE user_id = ?";
+
+        try (Connection connection = connector.connect();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.getString("user_id");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+    }
 
     public void updateWinCount(String userId) {
-        String query = "UPDATE users SET wins = wins + 1 WHERE user_id = ?";
+        String user = getQuizUser(userId);
+
+        if (user == null) {
+            String sql = "INSERT INTO quiz_users (user_id, win_count) VALUES (?, ?)";
+
+            try (Connection connection = connector.connect();
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+
+                ps.setString(1, userId);
+                ps.setInt(2, 1);
+                ps.executeUpdate();
+
+                System.out.println("A new quiz player has been added to the database: " + userId + ".");
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+            return;
+        }
+
+        String query = "UPDATE quiz_users SET win_count = win_count + 1 WHERE user_id = ?";
 
         try (Connection connection = connector.connect(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, userId);
             preparedStatement.executeUpdate();
 
-            System.out.println("A user win has been updated.");
+            System.out.println("A user win count has been updated: " + userId + ".");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void updateGamesPlayed(String userId1, String userId2) {
+        String user1 = getQuizUser(userId1);
+        String user2 = getQuizUser(userId2);
+
+        try (Connection connection = connector.connect()) {
+            if (user1 == null && user2 == null) {
+                String sql = "INSERT INTO quiz_users (user_id, games_played) VALUES (?, ?), (?, ?)";
+
+                try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                    ps.setString(1, userId1);
+                    ps.setInt(2, 1);
+                    ps.setString(3, userId2);
+                    ps.setInt(4, 1);
+                    ps.executeUpdate();
+                }
+                System.out.println("Two new quiz players have been added: " + userId1 + " and " + userId2 + ".");
+
+            } else {
+                if (user1 == null) {
+                    String sql = "INSERT INTO quiz_users (user_id, games_played) VALUES (?, ?)";
+
+                    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                        ps.setString(1, userId1);
+                        ps.setInt(2, 1);
+                        ps.executeUpdate();
+                    }
+                    System.out.println("A new quiz player has been added: " + userId1 + ".");
+                }
+
+                if (user2 == null) {
+                    String sql = "INSERT INTO quiz_users (user_id, games_played) VALUES (?, ?)";
+
+                    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                        ps.setString(1, userId2);
+                        ps.setInt(2, 1);
+                        ps.executeUpdate();
+                    }
+                    System.out.println("A new quiz player has been added: " + userId2 + ".");
+                }
+            }
+
+            String sql = "UPDATE quiz_users SET games_played = games_played + 1 WHERE user_id = ?";
+
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                if (user1 != null) {
+                    ps.setString(1, userId1);
+                    ps.executeUpdate();
+                }
+
+                if (user2 != null) {
+                    ps.setString(1, userId2);
+                    ps.executeUpdate();
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public int getGamesPlayed(String userId) {
+        String sql = "SELECT games_played FROM quiz_users WHERE user_id = ?";
+
+        try (Connection connection = connector.connect();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.getInt("games_played");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return 0;
     }
 }

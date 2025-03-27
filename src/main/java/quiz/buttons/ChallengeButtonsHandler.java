@@ -11,8 +11,7 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import quiz.databases.QuizDatabaseManager;
-import quiz.handlers.ChallengeTimeoutHandler;
-import quiz.handlers.QuizSessionHandler;
+import quiz.handlers.*;
 
 public class ChallengeButtonsHandler extends ListenerAdapter {
 
