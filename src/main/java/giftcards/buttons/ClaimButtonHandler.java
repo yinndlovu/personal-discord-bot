@@ -24,7 +24,7 @@ public class ClaimButtonHandler extends ListenerAdapter {
 
                 String giftCard = databaseManager.retrieveGiftCard(monthName).toUpperCase();
 
-                event.getHook().sendMessage("**" + giftCard + "**").setEphemeral(false).queue();
+                event.getHook().sendMessage(giftCard).setEphemeral(false).queue();
 
                 Button disabledButton = Button.success("claim_button", "Claimed").asDisabled();
 

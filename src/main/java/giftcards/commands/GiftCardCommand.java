@@ -22,23 +22,20 @@ public class GiftCardCommand extends ListenerAdapter {
                 if (!giftCard.isEmpty()) {
                     event.reply("Heyyy! You want a gift card?! Here's one. Enjoy!"
                             + "\n\n"
-                            + "Code: **" + giftCard + "**").queue();
+                            + "Code: " + giftCard).queue();
 
                     String message = "A gift card has been retrieved.";
 
-                    // alert me
                     event.getJDA().retrieveUserById(MY_USER_ID).queue(user -> {
                         user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue());
                     });
                     
-                    // delete the fetched gift card
                     manager.deleteRegularGiftCard(giftCard);
                 } else {
                     event.reply("Sorry! There are not any gift cards stored at the moment.").queue();
 
                     String message = "There has been an unsuccessful gift card retrieval attempt.";
 
-                    // alert me
                     event.getJDA().retrieveUserById(MY_USER_ID).queue(user -> {
                         user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue());
                     });
