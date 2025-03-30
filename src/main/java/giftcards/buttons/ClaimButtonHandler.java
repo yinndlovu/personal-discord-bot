@@ -12,31 +12,36 @@ public class ClaimButtonHandler extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
-        String compId = event.getComponentId();
-        String[] parts = compId.split(":");
-        
-        String action = parts[0];
-        String monthName = parts[1];
-        
-        if (action.equals("claim_button")) {
-            if (event.getUser().getId().equals(HER_USER_ID)) {
-                event.deferReply().queue();
 
-                String giftCard = databaseManager.retrieveGiftCard(monthName).toUpperCase();
+        try {
+            String compId = event.getComponentId();
+            String[] parts = compId.split(":");
 
-                event.getHook().sendMessage("**" + giftCard + "**").setEphemeral(false).queue();
+            String action = parts[0];
+            String monthName = parts[1];
 
-                Button disabledButton = Button.success("claim_button", "Claimed").asDisabled();
+            if (action.equals("claim_button")) {
+                if (event.getUser().getId().equals(HER_USER_ID)) {
+                    event.deferReply().queue();
 
-                event.getInteraction().getMessage().editMessageEmbeds(event.getInteraction().getMessage().getEmbeds())
-                        .setActionRow(disabledButton)
-                        .queue();
-            } else {
-                event.deferReply().queue();
+                    String giftCard = databaseManager.retrieveGiftCard(monthName).toUpperCase();
 
-                event.getHook().sendMessage("Hooooold your horses bucko! Only <@" + HER_USER_ID + "> "
-                        + "can claim the gift card.").setEphemeral(false).queue();
+                    event.getHook().sendMessage(giftCard).setEphemeral(false).queue();
+
+                    Button disabledButton = Button.success("claim_button", "Claimed").asDisabled();
+
+                    event.getInteraction().getMessage().editMessageEmbeds(event.getInteraction().getMessage().getEmbeds())
+                            .setActionRow(disabledButton)
+                            .queue();
+                } else {
+                    event.deferReply().queue();
+
+                    event.getHook().sendMessage("Hooooold your horses bucko! Only <@" + HER_USER_ID + "> "
+                            + "can claim the gift card.").setEphemeral(false).queue();
+                }
             }
+        } catch (Exception ex) {
+            System.out.println("Something went wrong in claim the gift card.");
         }
     }
 }
