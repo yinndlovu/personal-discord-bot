@@ -12,14 +12,13 @@ public class ClaimButtonHandler extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
-
         try {
             String compId = event.getComponentId();
             String[] parts = compId.split(":");
-
+            
             String action = parts[0];
             String monthName = parts[1];
-
+            
             if (action.equals("claim_button")) {
                 if (event.getUser().getId().equals(HER_USER_ID)) {
                     event.deferReply().queue();
