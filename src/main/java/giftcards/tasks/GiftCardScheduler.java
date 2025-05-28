@@ -47,7 +47,7 @@ public class GiftCardScheduler {
 
     public void sendGiftCard() {
         try {
-            LocalDate currentDate = LocalDate.now(ZoneOffset.UTC);
+            LocalDate currentDate = LocalDate.now(ZoneId.of("Asia/Manila"));
             String monthName = currentDate.getMonth().name().toLowerCase();
             String giftCard = databaseManager.retrieveGiftCard(monthName);
 
