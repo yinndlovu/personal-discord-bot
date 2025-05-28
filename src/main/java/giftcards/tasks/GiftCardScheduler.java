@@ -36,7 +36,7 @@ public class GiftCardScheduler {
     }
 
     private long getInitialDelay() {
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.of("+8"));
         ZonedDateTime nextRun = now.withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
 
         if (now.isAfter(nextRun)) {
@@ -47,7 +47,7 @@ public class GiftCardScheduler {
 
     public void sendGiftCard() {
         try {
-            LocalDate currentDate = LocalDate.now(ZoneId.of("Asia/Manila"));
+            LocalDate currentDate = LocalDate.now(ZoneOffset.of("+8"));
             String monthName = currentDate.getMonth().name().toLowerCase();
             String giftCard = databaseManager.retrieveGiftCard(monthName);
 
