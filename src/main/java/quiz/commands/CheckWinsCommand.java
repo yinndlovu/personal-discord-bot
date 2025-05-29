@@ -33,8 +33,8 @@ public class CheckWinsCommand extends ListenerAdapter {
 
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setTitle("Quiz Stats");
-            embedBuilder.setDescription("Games played: " + gamesPlayed + "\n\n" +
-                    "Games won: " + gamesWon);
+            embedBuilder.setDescription("Games played: " + gamesPlayed + "\n\n"
+                    + "Games won: " + gamesWon);
             embedBuilder.setColor(Color.CYAN);
 
             event.reply("").addEmbeds(embedBuilder.build()).queue();

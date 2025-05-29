@@ -13,7 +13,9 @@ public class QuizDatabaseManager {
         ArrayList<QuizSet> quizSet = new ArrayList<>();
         String query = "SELECT question, answer FROM quiz_set ORDER BY RAND() LIMIT 10";
 
-        try (Connection connection = connector.connect(); PreparedStatement preparedStatement = connection.prepareStatement(query); ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (Connection connection = connector.connect();
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
                 String question = resultSet.getString("question");
@@ -29,7 +31,8 @@ public class QuizDatabaseManager {
     public void addSet(String question, String answer) {
         String query = "INSERT INTO quiz_set (question, answer) VALUES (?, ?)";
 
-        try (Connection connection = connector.connect(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = connector.connect();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, question);
             preparedStatement.setString(2, answer);
             preparedStatement.executeUpdate();
@@ -58,7 +61,7 @@ public class QuizDatabaseManager {
     }
      */
 
-    /*
+ /*
     public String getAnswer(int id) {
         String query = "SELECT answer FROM quiz_set WHERE id = ?";
 
@@ -75,12 +78,11 @@ public class QuizDatabaseManager {
         return null;
     }
      */
-
     public int getWinCount(String userId) {
         String sql = "SELECT win_count FROM quiz_users WHERE user_id = ?";
 
         try (Connection connection = connector.connect();
-            PreparedStatement ps = connection.prepareStatement(sql)) {
+                PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, userId);
 
@@ -99,7 +101,7 @@ public class QuizDatabaseManager {
         String sql = "SELECT user_id FROM quiz_users WHERE user_id = ?";
 
         try (Connection connection = connector.connect();
-            PreparedStatement ps = connection.prepareStatement(sql)) {
+                PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, userId);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -118,7 +120,7 @@ public class QuizDatabaseManager {
             String sql = "INSERT INTO quiz_users (user_id, win_count) VALUES (?, ?)";
 
             try (Connection connection = connector.connect();
-                PreparedStatement ps = connection.prepareStatement(sql)) {
+                    PreparedStatement ps = connection.prepareStatement(sql)) {
 
                 ps.setString(1, userId);
                 ps.setInt(2, 1);
@@ -133,7 +135,8 @@ public class QuizDatabaseManager {
 
         String query = "UPDATE quiz_users SET win_count = win_count + 1 WHERE user_id = ?";
 
-        try (Connection connection = connector.connect(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = connector.connect();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, userId);
             preparedStatement.executeUpdate();
 
@@ -206,7 +209,7 @@ public class QuizDatabaseManager {
         String sql = "SELECT games_played FROM quiz_users WHERE user_id = ?";
 
         try (Connection connection = connector.connect();
-            PreparedStatement ps = connection.prepareStatement(sql)) {
+                PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, userId);
 
             try (ResultSet rs = ps.executeQuery()) {
