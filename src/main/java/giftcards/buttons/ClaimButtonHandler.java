@@ -1,13 +1,15 @@
 package giftcards.buttons;
 
 import databases.DatabaseManager;
+import essentials.Config;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class ClaimButtonHandler extends ListenerAdapter {
 
-    private final String HER_USER_ID = "";
+    private final Config config = new Config();
+    private final String HER_USER_ID = config.getHerUserId();
     private final DatabaseManager databaseManager = new DatabaseManager();
 
     @Override
